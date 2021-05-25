@@ -1,3 +1,4 @@
+import { ThrowStmt } from "@angular/compiler";
 import { Component, OnInit } from "@angular/core";
 import { Ingredient } from "../shared/ingredient.model";
 
@@ -13,7 +14,14 @@ export class ShoppingListComponent implements OnInit {
       amount: 5,
     }
   ];
+  
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    
+  }
+  pushIngredient(ingredient){
+    this.ingredients.push(ingredient)
+    //console.log(ingredient)
+  }
 }
