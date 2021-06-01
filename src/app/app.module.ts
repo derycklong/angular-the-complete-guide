@@ -12,6 +12,10 @@ import { RecipeItemComponent } from './recipes/recipe-list/recipe-item/recipe-it
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';
 import { RouterModule } from '@angular/router';
+import { AppRoutingModule } from './app-routing.module';
+import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
+import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
+import { pageNotFoundComponent } from './shared/error/page-not-found.component';
 
 
 @NgModule({
@@ -21,18 +25,17 @@ import { RouterModule } from '@angular/router';
     RecipesComponent,
     RecipeListComponent,
     RecipeDetailComponent,
+    RecipeEditComponent,
     RecipeItemComponent,
+    RecipeStartComponent,
     ShoppingListComponent,
-    ShoppingEditComponent
+    ShoppingEditComponent,
+    pageNotFoundComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    RouterModule.forRoot([
-      {path:'',component:RecipesComponent},
-      {path:'recipes',component:RecipesComponent},
-      {path:'shopping-list',component:ShoppingListComponent}
-    ])
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

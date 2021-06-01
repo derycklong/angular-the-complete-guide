@@ -9,6 +9,7 @@ export class RecipeService {
 
   private recipes: Recipe[] = [
     {
+      id: 1,
       name: "Fillet o Fish",
       description: "The catch of the day is sure a great catch at McDonald’s. A fish filet, smothered with tangy tartar sauce and half a slice of cheese between tender steamed buns is simply pure ocean heaven. ",
       imagePath:
@@ -20,6 +21,7 @@ export class RecipeService {
       ],
     },
     {
+      id: 2,
       name: "Big Mac",
       description: "Since its introduction in 1968, the Big Mac™ has grown to become an icon for burger lovers everywhere. Our two all-beef patties, special sauce, lettuce, cheese, pickles, onions on a sesame seed bun recipe makes a one-of-a-kind experience.",
       imagePath:
@@ -35,5 +37,9 @@ export class RecipeService {
 
   getRecipes(): Recipe[] {
     return this.recipes.slice();
+  }
+
+  getRecipe(id:number): Recipe {
+    return this.recipes.find(r => r.id == id)
   }
 }

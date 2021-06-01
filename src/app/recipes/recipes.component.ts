@@ -1,5 +1,6 @@
 import { ThrowStmt } from "@angular/compiler";
 import { Component, Input, OnInit } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Recipe } from "./recipe.model";
 import { RecipeService } from "./recipe.service";
 
@@ -9,13 +10,11 @@ import { RecipeService } from "./recipe.service";
   styleUrls: ["./recipes.component.css"],
 })
 export class RecipesComponent implements OnInit {
-  selectedRecipe: Recipe;
-  constructor(private recipeService: RecipeService) {}
+
+  constructor(private route:ActivatedRoute, private router:Router) {}
 
   ngOnInit() {
-    this.recipeService.recipeSelected.subscribe((recipe: Recipe) => {
-      this.selectedRecipe = recipe;
-      console.log(this.selectedRecipe)
-    });
+    console.log(this.router.url)
+
   }
 }

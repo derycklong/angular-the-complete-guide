@@ -1,11 +1,11 @@
 <div class="row">
   <div class="col-md-12">
-    <button class="btn btn-success mt-3">New Recipe</button>
+    <button class="btn btn-success mt-3" routerLink="new" >New Recipe</button>
   </div>
 </div>
 <hr />
 <div class="row">
   <div class="col-sm-12">
-    <app-recipe-item *ngFor="let recipeEl of recipes" [recipe]="recipeEl" (selectedRecipe)="bindRecipe($event)"> </app-recipe-item>
+    <app-recipe-item *ngFor="let recipeEl of recipes" [recipe]="recipeEl"> </app-recipe-item>
   </div>
 </div>
