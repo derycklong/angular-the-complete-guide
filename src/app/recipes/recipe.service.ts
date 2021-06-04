@@ -1,12 +1,11 @@
-import { Injectable, OnInit, EventEmitter } from "@angular/core";
+import { Injectable } from "@angular/core";
+import { Observable, of } from "rxjs";
 import { Recipe } from "./recipe.model";
 
 @Injectable({
   providedIn: "root",
 })
 export class RecipeService {
-  recipeSelected = new EventEmitter<Recipe>();
-
   private recipes: Recipe[] = [
     {
       id: 1,
@@ -35,11 +34,23 @@ export class RecipeService {
     },
   ];
 
-  getRecipes(): Recipe[] {
-    return this.recipes.slice();
+  getRecipes(): Observable<Recipe[]> {
+    return of(this.recipes);
   }
 
   getRecipe(id:number): Recipe {
     return this.recipes.find(r => r.id == id)
+  }
+
+  addRecipe(recipe:Recipe){
+    recipe.id = this.recipes[this.recipes.length -1].id + 1
+    this.recipes.push(recipe)
+  }
+
+  updateRecipe(id:number,updatedRecipe:Recipe){
+    let updateItem = this.recipes.find(recipe => recipe.id === id)
+    let index = this.recipes.indexOf(updateItem)
+    console.log(updatedRecipe)
+    this.recipes[index] = updatedRecipe
   }
 }
