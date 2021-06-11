@@ -6,6 +6,7 @@ import { Recipe } from "./recipe.model";
   providedIn: "root",
 })
 export class RecipeService {
+  test : number
   private recipes: Recipe[] = [
     {
       id: 1,
@@ -39,18 +40,30 @@ export class RecipeService {
   }
 
   getRecipe(id:number): Recipe {
-    return this.recipes.find(r => r.id == id)
+    console.log(typeof(id))
+    return this.recipes.find(r => r.id === +id)
   }
 
-  addRecipe(recipe:Recipe){
+  addRecipe(recipe:Recipe) : number{
     recipe.id = this.recipes[this.recipes.length -1].id + 1
     this.recipes.push(recipe)
+
+    return recipe.id
   }
 
   updateRecipe(id:number,updatedRecipe:Recipe){
-    let updateItem = this.recipes.find(recipe => recipe.id === id)
+    let updateItem = this.recipes.find(recipe => recipe.id === +id)
     let index = this.recipes.indexOf(updateItem)
+    console.log(index)
     console.log(updatedRecipe)
     this.recipes[index] = updatedRecipe
+  }
+
+  deleteRecipe(id:number){
+    
+    let updateItem = this.recipes.find(recipe => recipe.id === +id)
+    let index = this.recipes.indexOf(updateItem)
+    
+    this.recipes.splice(index,1)
   }
 }
