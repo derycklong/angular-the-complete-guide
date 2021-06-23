@@ -1,3 +1,4 @@
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { Recipe } from "./recipe.model";
@@ -7,6 +8,8 @@ import { Recipe } from "./recipe.model";
 })
 export class RecipeService {
   test : number
+  constructor(private http:HttpClient){}
+
   private recipes: Recipe[] = [
     {
       id: 1,
@@ -35,8 +38,12 @@ export class RecipeService {
     },
   ];
 
+  setRecipes(recipes : Recipe[]){
+    this.recipes = recipes
+  }
+
   getRecipes(): Observable<Recipe[]> {
-    return of(this.recipes);
+    return this.http.get<Recipe[]>('https://ng-complete-guide-c62c3-default-rtdb.asia-southeast1.firebasedatabase.app/recipes.json')
   }
 
   getRecipe(id:number): Recipe {

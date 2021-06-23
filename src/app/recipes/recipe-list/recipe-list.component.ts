@@ -18,6 +18,7 @@ export class RecipeListComponent implements OnInit,OnDestroy {
     //this.recipes = this.recipeService.getRecipes()
     
     this.sub = this.recipeService.getRecipes().subscribe( recipes => {
+      this.recipeService.setRecipes(recipes)
       this.recipes = recipes
     })
     
