@@ -11,10 +11,9 @@ import { RecipeService } from "./recipe.service";
 })
 export class RecipesComponent implements OnInit {
 
-  constructor(private route:ActivatedRoute, private router:Router) {}
+  constructor(private route:ActivatedRoute, private router:Router, private recipeService:RecipeService) {}
 
   ngOnInit() {
     console.log(this.router.url)
-
   }
 }

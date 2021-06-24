@@ -1,60 +1,44 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
+import { Observable, of, Subject } from "rxjs";
 import { Recipe } from "./recipe.model";
 
 @Injectable({
   providedIn: "root",
 })
 export class RecipeService {
-  test : number
   constructor(private http:HttpClient){}
 
-  private recipes: Recipe[] = [
-    {
-      id: 1,
-      name: "Fillet o Fish",
-      description: "The catch of the day is sure a great catch at McDonald’s. A fish filet, smothered with tangy tartar sauce and half a slice of cheese between tender steamed buns is simply pure ocean heaven. ",
-      imagePath:
-        "https://d1nqx6es26drid.cloudfront.net/app/uploads/2015/04/04113347/FOF-350x350.png",
-      ingredients: [
-        { name: "Bun", amount: 2 },
-        { name: "Fillet Patty", amount: 1 },
-        { name: "Chips", amount: 20 },
-      ],
-    },
-    {
-      id: 2,
-      name: "Big Mac",
-      description: "Since its introduction in 1968, the Big Mac™ has grown to become an icon for burger lovers everywhere. Our two all-beef patties, special sauce, lettuce, cheese, pickles, onions on a sesame seed bun recipe makes a one-of-a-kind experience.",
-      imagePath:
-        "https://d1nqx6es26drid.cloudfront.net/app/uploads/2015/04/04043402/product-big-mac.png",
-      ingredients: [
-        { name: "Bun", amount: 3 },
-        { name: "Beef Patty", amount: 1 },
-        { name: "Lettuce", amount: 5 },
-        { name: "Fries", amount: 20 },
-      ],
-    },
-  ];
+  private recipes: Recipe[] = []
+  recipesChanged = new Subject<Recipe[]>();
 
   setRecipes(recipes : Recipe[]){
     this.recipes = recipes
+    //this.recipesChanged.next(this.recipes.slice())
+    //console.log(this.recipes)
   }
 
   getRecipes(): Observable<Recipe[]> {
     return this.http.get<Recipe[]>('https://ng-complete-guide-c62c3-default-rtdb.asia-southeast1.firebasedatabase.app/recipes.json')
   }
 
+  getRecipesLocal(): Recipe[]{
+    return this.recipes
+  }
+
+  storeRecipes(recipes: Recipe[]): Observable<any> {
+    return this.http.put('https://ng-complete-guide-c62c3-default-rtdb.asia-southeast1.firebasedatabase.app/recipes.json',recipes)
+  }
+
   getRecipe(id:number): Recipe {
-    console.log(typeof(id))
+    console.log(this.recipes)
     return this.recipes.find(r => r.id === +id)
   }
 
   addRecipe(recipe:Recipe) : number{
     recipe.id = this.recipes[this.recipes.length -1].id + 1
     this.recipes.push(recipe)
-
+    console.log(this.recipes)
     return recipe.id
   }
 
@@ -64,6 +48,8 @@ export class RecipeService {
     console.log(index)
     console.log(updatedRecipe)
     this.recipes[index] = updatedRecipe
+    console.log(this.recipes)
+    this.recipesChanged.next(this.recipes)
   }
 
   deleteRecipe(id:number){
@@ -74,3 +60,37 @@ export class RecipeService {
     this.recipes.splice(index,1)
   }
 }
+
+
+
+
+
+
+
+  // private recipes: Recipe[] = [
+  //   {
+  //     id: 1,
+  //     name: "Fillet o Fish",
+  //     description: "The catch of the day is sure a great catch at McDonald’s. A fish filet, smothered with tangy tartar sauce and half a slice of cheese between tender steamed buns is simply pure ocean heaven. ",
+  //     imagePath:
+  //       "https://d1nqx6es26drid.cloudfront.net/app/uploads/2015/04/04113347/FOF-350x350.png",
+  //     ingredients: [
+  //       { name: "Bun", amount: 2 },
+  //       { name: "Fillet Patty", amount: 1 },
+  //       { name: "Chips", amount: 20 },
+  //     ],
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Big Mac",
+  //     description: "Since its introduction in 1968, the Big Mac™ has grown to become an icon for burger lovers everywhere. Our two all-beef patties, special sauce, lettuce, cheese, pickles, onions on a sesame seed bun recipe makes a one-of-a-kind experience.",
+  //     imagePath:
+  //       "https://d1nqx6es26drid.cloudfront.net/app/uploads/2015/04/04043402/product-big-mac.png",
+  //     ingredients: [
+  //       { name: "Bun", amount: 3 },
+  //       { name: "Beef Patty", amount: 1 },
+  //       { name: "Lettuce", amount: 5 },
+  //       { name: "Fries", amount: 20 },
+  //     ],
+  //   },
+  // ];

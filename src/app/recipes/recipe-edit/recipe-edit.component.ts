@@ -7,8 +7,9 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { of } from "rxjs";
+import { tap } from "rxjs/operators";
 import { Ingredient } from "src/app/shared/ingredient.model";
 import { RecipeStartComponent } from "../recipe-start/recipe-start.component";
 import { Recipe } from "../recipe.model";
@@ -25,13 +26,14 @@ export class RecipeEditComponent implements OnInit {
   submitRecipe: Recipe = {};
   submitIngredients: Ingredient = {};
   ingredients = new FormArray([]);
+  mySubscription: any;
 
   constructor(
     private route: ActivatedRoute,
     private recipeService: RecipeService,
     private formBuilder: FormBuilder,
     private router: Router
-  ) {}
+    ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -45,10 +47,11 @@ export class RecipeEditComponent implements OnInit {
   private initForm() {
 
     const loadRecipe: Recipe = this.recipeService.getRecipe(this.id);
+    //console.log(loadRecipe)
 
     if (this.editMode === true) {
       if (loadRecipe["ingredients"]) {
-        console.log(loadRecipe.ingredients);
+        //console.log(loadRecipe.ingredients);
         for (let ingre of loadRecipe.ingredients) {
           this.ingredients.push(
             this.formBuilder.group({
@@ -95,7 +98,14 @@ export class RecipeEditComponent implements OnInit {
 
   onCancel(){
     this.router.navigate(['/recipes',this.id])
+  
   }
+  reloadCurrentRoute() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
+    });
+}
 
   onSubmit() {
     this.submitRecipe.id = null;
@@ -104,15 +114,22 @@ export class RecipeEditComponent implements OnInit {
     this.submitRecipe.description = this.recipeGroup.controls["description"].value;
     this.submitRecipe.ingredients = (<FormArray>this.recipeGroup.controls["ingredients"]).value
 
-    console.log(this.submitRecipe)
+    //console.log(this.submitRecipe)
 
     if (this.editMode === true) {
       this.submitRecipe.id = this.id;
       this.recipeService.updateRecipe(this.id, this.submitRecipe);
+      this.recipeService.storeRecipes(this.recipeService.getRecipesLocal()).subscribe()
+      console.log(this.recipeService.getRecipe(this.submitRecipe.id))
+      //location.reload()
       this.router.navigate(['/recipes',this.submitRecipe.id])
+      
+      
     } else {
       const id = this.recipeService.addRecipe(this.submitRecipe);
-      this.router.navigate(['/recipes',id])
+      //this.recipeService.getRecipes().pipe(tap(recipe => this.recipeService.setRecipes(recipe)))
+      this.recipeService.storeRecipes(this.recipeService.getRecipesLocal()).subscribe()
+      this.router.navigate(['/recipes'])
     }
     //
   }
