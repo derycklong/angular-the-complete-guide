@@ -18,15 +18,13 @@ export class RecipeDetailComponent implements OnInit {
     this.route.params.subscribe(params =>{
       this.selectedId = params['id']
       this.recipe = this.recipeService.getRecipe(this.selectedId)
-      console.log('detail')
     })
 
-    
   } 
-
 
   deleteRecipe(){
     this.recipeService.deleteRecipe(this.selectedId)
+    this.recipeService.storeRecipes(this.recipeService.getRecipesLocal()).subscribe()
     this.router.navigate(['recipes'])
   }
 

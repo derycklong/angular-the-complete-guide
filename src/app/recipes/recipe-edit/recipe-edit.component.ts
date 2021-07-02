@@ -72,10 +72,6 @@ export class RecipeEditComponent implements OnInit {
       ingredients: this.ingredients,
     });
 
-
-
-    console.log(this.recipeGroup)
-
     if (this.editMode === true) {
       this.recipeGroup.controls["name"].setValue(loadRecipe.name);
       this.recipeGroup.controls["imagePath"].setValue(loadRecipe.imagePath);
@@ -121,7 +117,6 @@ export class RecipeEditComponent implements OnInit {
       this.recipeService.updateRecipe(this.id, this.submitRecipe);
       this.recipeService.storeRecipes(this.recipeService.getRecipesLocal()).subscribe()
       console.log(this.recipeService.getRecipe(this.submitRecipe.id))
-      //location.reload()
       this.router.navigate(['/recipes',this.submitRecipe.id])
       
       
@@ -129,7 +124,7 @@ export class RecipeEditComponent implements OnInit {
       const id = this.recipeService.addRecipe(this.submitRecipe);
       //this.recipeService.getRecipes().pipe(tap(recipe => this.recipeService.setRecipes(recipe)))
       this.recipeService.storeRecipes(this.recipeService.getRecipesLocal()).subscribe()
-      this.router.navigate(['/recipes'])
+      this.router.navigate(['/recipes', id])
     }
     //
   }

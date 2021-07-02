@@ -1,13 +1,15 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, of, Subject } from "rxjs";
+import { exhaustMap, take } from "rxjs/operators";
+import { AuthService } from "../auth/auth.service";
 import { Recipe } from "./recipe.model";
 
 @Injectable({
   providedIn: "root",
 })
 export class RecipeService {
-  constructor(private http:HttpClient){}
+  constructor(private http:HttpClient, private authService:AuthService){}
 
   private recipes: Recipe[] = []
   recipesChanged = new Subject<Recipe[]>();
@@ -18,8 +20,9 @@ export class RecipeService {
     //console.log(this.recipes)
   }
 
-  getRecipes(): Observable<Recipe[]> {
+  getRecipes():Observable<Recipe[]>{
     return this.http.get<Recipe[]>('https://ng-complete-guide-c62c3-default-rtdb.asia-southeast1.firebasedatabase.app/recipes.json')
+    
   }
 
   getRecipesLocal(): Recipe[]{
@@ -31,33 +34,30 @@ export class RecipeService {
   }
 
   getRecipe(id:number): Recipe {
-    console.log(this.recipes)
     return this.recipes.find(r => r.id === +id)
   }
 
   addRecipe(recipe:Recipe) : number{
     recipe.id = this.recipes[this.recipes.length -1].id + 1
     this.recipes.push(recipe)
-    console.log(this.recipes)
     return recipe.id
   }
 
   updateRecipe(id:number,updatedRecipe:Recipe){
     let updateItem = this.recipes.find(recipe => recipe.id === +id)
     let index = this.recipes.indexOf(updateItem)
-    console.log(index)
-    console.log(updatedRecipe)
     this.recipes[index] = updatedRecipe
-    console.log(this.recipes)
-    this.recipesChanged.next(this.recipes)
+    //firing to recipe list component 
+    //this.recipesChanged.next(this.recipes)
   }
 
   deleteRecipe(id:number){
     
     let updateItem = this.recipes.find(recipe => recipe.id === +id)
     let index = this.recipes.indexOf(updateItem)
-    
     this.recipes.splice(index,1)
+    //firing to recipe list component
+    //this.recipesChanged.next(this.recipes)
   }
 }
 
