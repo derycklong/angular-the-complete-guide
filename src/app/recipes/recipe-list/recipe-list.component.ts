@@ -20,13 +20,7 @@ export class RecipeListComponent implements OnInit,OnDestroy {
         this.recipes = recipes
       })
   
-    // this.recipeService.recipesChanged
-    // .subscribe(
-    //   (recipes: Recipe[]) => {
-    //     this.recipes = recipes;
-    //     console.log('changed')
-    //   }
-    // );
+
     
   }
 
