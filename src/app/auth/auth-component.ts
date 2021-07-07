@@ -34,6 +34,10 @@ export class AuthComponent implements OnInit{
     this.isLoginMode = !this.isLoginMode;
   }
 
+  onHandleError(){
+    this.error = null
+  }
+
   onSubmit(form: FormGroup){
     this.error=null
     if (!this.loginGroup.valid){
